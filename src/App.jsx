@@ -16,30 +16,33 @@ function App() {
   const MONTHLY_INTEREST = 600000 // 월이자: 60만원
   const INTEREST_PAYMENT_DAY = 25 // 이자 입금일: 매달 25일
 
-  // URL 파라미터에서 테스트 가격 확인
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search)
-    const testPriceParam = urlParams.get('testPrice')
-    if (testPriceParam) {
-      const price = parseFloat(testPriceParam)
-      if (!isNaN(price) && price > 0) {
-        setTestPrice(price)
-        setIsTestMode(true)
-        // 테스트 모드: 가짜 데이터 생성
-        const mockData = {
-          market: 'KRW-BTC',
-          trade_price: price,
-          timestamp: Date.now(),
-          signed_change_rate: 0,
-          acc_trade_price_24h: 0
-        }
-        setBtcPrice(mockData)
-        setLoading(false)
-        setError(null)
-        console.log('🧪 테스트 모드 활성화: BTC 가격 =', price.toLocaleString('ko-KR'), '원')
+  // 테스트 가격 적용 함수
+  const applyTestPrice = (price) => {
+    if (price && price > 0) {
+      setTestPrice(price)
+      setIsTestMode(true)
+      // 테스트 모드: 가짜 데이터 생성
+      const mockData = {
+        market: 'KRW-BTC',
+        trade_price: price,
+        timestamp: Date.now(),
+        signed_change_rate: 0,
+        acc_trade_price_24h: 0
       }
+      setBtcPrice(mockData)
+      setLoading(false)
+      setError(null)
+      console.log('🧪 테스트 모드 활성화: BTC 가격 =', price.toLocaleString('ko-KR'), '원')
     }
-  }, [])
+  }
+
+  // 테스트 모드 해제 함수
+  const disableTestMode = () => {
+    setIsTestMode(false)
+    setTestPrice(null)
+    // 실제 가격 다시 가져오기
+    fetchBtcPrice()
+  }
 
   // Upbit API에서 Bitcoin 가격 가져오기
   const fetchBtcPrice = async () => {
@@ -325,6 +328,56 @@ function App() {
             </div>
           </>
         )}
+
+        {/* 테스트 가격 입력 섹션 */}
+        <div className="test-price-section">
+          <h3>🧪 테스트 모드</h3>
+          <p className="test-description">임의의 BTC 가격을 입력하여 계산 결과를 테스트할 수 있습니다.</p>
+          <div className="test-input-group">
+            <input
+              type="number"
+              placeholder="테스트할 BTC 가격 입력 (예: 150000000)"
+              className="test-price-input"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  const price = parseFloat(e.target.value)
+                  if (!isNaN(price) && price > 0) {
+                    applyTestPrice(price)
+                  }
+                }
+              }}
+            />
+            <div className="test-buttons">
+              <button
+                onClick={() => {
+                  const input = document.querySelector('.test-price-input')
+                  const price = parseFloat(input.value)
+                  if (!isNaN(price) && price > 0) {
+                    applyTestPrice(price)
+                  } else {
+                    alert('올바른 가격을 입력해주세요.')
+                  }
+                }}
+                className="test-apply-btn"
+              >
+                적용
+              </button>
+              {isTestMode && (
+                <button
+                  onClick={disableTestMode}
+                  className="test-reset-btn"
+                >
+                  실제 가격으로 복원
+                </button>
+              )}
+            </div>
+          </div>
+          {isTestMode && (
+            <div className="test-active-notice">
+              ✓ 테스트 모드 활성화 중: BTC 가격 = {testPrice?.toLocaleString('ko-KR')} 원
+            </div>
+          )}
+        </div>
       </main>
 
       <footer className="app-footer">
