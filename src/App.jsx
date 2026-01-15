@@ -238,11 +238,11 @@ function App() {
                   <span className="info-value">{MONTHLY_INTEREST.toLocaleString('ko-KR')} 원</span>
                 </div>
                 <div className="info-item">
-                  <span className="info-label">받은 이자 횟수</span>
+                  <span className="info-label">납입 이자 횟수</span>
                   <span className="info-value">{interestCount}회</span>
                 </div>
                 <div className="info-item">
-                  <span className="info-label">누적 받은 이자</span>
+                  <span className="info-label">누적 납입 이자</span>
                   <span className="info-value highlight">{receivedInterest.toLocaleString('ko-KR')} 원</span>
                 </div>
               </div>
@@ -263,7 +263,7 @@ function App() {
                 <div className="scenario-box">
                   <div className="scenario-title">📉 시나리오: BTC 가격 하락/동일</div>
                   <div className="scenario-desc">
-                    현재 BTC 가격이 당시 가격보다 낮거나 같아, 원금만 상환합니다.
+                    기존 납부 이자와 원금만 상환합니다.
                   </div>
                 </div>
               )}
@@ -284,7 +284,7 @@ function App() {
                       <span className="calc-value highlight">{Math.round(repaymentInfo.additionalAmount).toLocaleString('ko-KR')} 원</span>
                     </div>
                     <div className="calc-row">
-                      <span className="calc-label">누적 받은 이자</span>
+                      <span className="calc-label">누적 납입 이자</span>
                       <span className="calc-value">- {receivedInterest.toLocaleString('ko-KR')} 원</span>
                     </div>
                     <div className="calc-divider"></div>
@@ -300,9 +300,6 @@ function App() {
                     <div className="calc-row">
                       <span className="calc-label">대출 원금</span>
                       <span className="calc-value">{LOAN_AMOUNT.toLocaleString('ko-KR')} 원</span>
-                    </div>
-                    <div className="calc-row info-note">
-                      <span className="calc-label">※ 이자 {receivedInterest.toLocaleString('ko-KR')} 원은 이미 받았으므로 상환 금액에서 제외됩니다.</span>
                     </div>
                     <div className="calc-divider"></div>
                     <div className="calc-row final">
