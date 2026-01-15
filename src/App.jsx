@@ -269,13 +269,12 @@ function App() {
               )}
 
               <div className="calculation-details">
-                <div className="calc-row">
-                  <span className="calc-label">대출 원금</span>
-                  <span className="calc-value">{LOAN_AMOUNT.toLocaleString('ko-KR')} 원</span>
-                </div>
-                
-                {repaymentInfo.scenario === 'high' && (
+                {repaymentInfo.scenario === 'high' ? (
                   <>
+                    <div className="calc-row">
+                      <span className="calc-label">대출 원금</span>
+                      <span className="calc-value">{LOAN_AMOUNT.toLocaleString('ko-KR')} 원</span>
+                    </div>
                     <div className="calc-row">
                       <span className="calc-label">현재 BTC 가격으로 0.88개 구매 비용</span>
                       <span className="calc-value">{Math.round(repaymentInfo.btcValueAtCurrentPrice).toLocaleString('ko-KR')} 원</span>
@@ -288,24 +287,32 @@ function App() {
                       <span className="calc-label">누적 받은 이자</span>
                       <span className="calc-value">- {receivedInterest.toLocaleString('ko-KR')} 원</span>
                     </div>
+                    <div className="calc-divider"></div>
+                    <div className="calc-row final">
+                      <span className="calc-label">최종 상환 금액</span>
+                      <span className="calc-value final-amount">
+                        {Math.round(repaymentInfo.repaymentAmount).toLocaleString('ko-KR')} 원
+                      </span>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="calc-row">
+                      <span className="calc-label">대출 원금</span>
+                      <span className="calc-value">{LOAN_AMOUNT.toLocaleString('ko-KR')} 원</span>
+                    </div>
+                    <div className="calc-row info-note">
+                      <span className="calc-label">※ 이자 {receivedInterest.toLocaleString('ko-KR')} 원은 이미 받았으므로 상환 금액에서 제외됩니다.</span>
+                    </div>
+                    <div className="calc-divider"></div>
+                    <div className="calc-row final">
+                      <span className="calc-label">최종 상환 금액</span>
+                      <span className="calc-value final-amount">
+                        {Math.round(repaymentInfo.repaymentAmount).toLocaleString('ko-KR')} 원
+                      </span>
+                    </div>
                   </>
                 )}
-                
-                {repaymentInfo.scenario === 'low' && (
-                  <div className="calc-row">
-                    <span className="calc-label">이자 (이미 받았으므로 제외)</span>
-                    <span className="calc-value">{receivedInterest.toLocaleString('ko-KR')} 원</span>
-                  </div>
-                )}
-                
-                <div className="calc-divider"></div>
-                
-                <div className="calc-row final">
-                  <span className="calc-label">최종 상환 금액</span>
-                  <span className="calc-value final-amount">
-                    {Math.round(repaymentInfo.repaymentAmount).toLocaleString('ko-KR')} 원
-                  </span>
-                </div>
               </div>
             </div>
 

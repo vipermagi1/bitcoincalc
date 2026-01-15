@@ -297,6 +297,19 @@
   margin-top: 0.5rem;
 }
 
+.calc-row.info-note {
+  background: #edf2f7;
+  border-left: 4px solid #4299e1;
+  padding: 1rem;
+}
+
+.calc-row.info-note .calc-label {
+  color: #2c5282;
+  font-size: 0.9rem;
+  font-style: italic;
+  width: 100%;
+}
+
 .calc-label {
   color: #2d3748;
   font-size: 1rem;
