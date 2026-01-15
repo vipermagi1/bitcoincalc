@@ -5,6 +5,8 @@ function App() {
   const [btcPrice, setBtcPrice] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [testPrice, setTestPrice] = useState(null)
+  const [isTestMode, setIsTestMode] = useState(false)
 
   // 대출 정보
   const LOAN_DATE = new Date('2025-11-29') // 대출 시작일
@@ -14,8 +16,38 @@ function App() {
   const MONTHLY_INTEREST = 600000 // 월이자: 60만원
   const INTEREST_PAYMENT_DAY = 25 // 이자 입금일: 매달 25일
 
+  // URL 파라미터에서 테스트 가격 확인
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const testPriceParam = urlParams.get('testPrice')
+    if (testPriceParam) {
+      const price = parseFloat(testPriceParam)
+      if (!isNaN(price) && price > 0) {
+        setTestPrice(price)
+        setIsTestMode(true)
+        // 테스트 모드: 가짜 데이터 생성
+        const mockData = {
+          market: 'KRW-BTC',
+          trade_price: price,
+          timestamp: Date.now(),
+          signed_change_rate: 0,
+          acc_trade_price_24h: 0
+        }
+        setBtcPrice(mockData)
+        setLoading(false)
+        setError(null)
+        console.log('🧪 테스트 모드 활성화: BTC 가격 =', price.toLocaleString('ko-KR'), '원')
+      }
+    }
+  }, [])
+
   // Upbit API에서 Bitcoin 가격 가져오기
   const fetchBtcPrice = async () => {
+    // 테스트 모드면 API 호출 안 함
+    if (isTestMode && testPrice) {
+      return
+    }
+
     try {
       setLoading(true)
       
@@ -73,11 +105,13 @@ function App() {
   }
 
   useEffect(() => {
-    fetchBtcPrice()
-    // 10초마다 가격 업데이트
-    const interval = setInterval(fetchBtcPrice, 10000)
-    return () => clearInterval(interval)
-  }, [])
+    if (!isTestMode) {
+      fetchBtcPrice()
+      // 10초마다 가격 업데이트
+      const interval = setInterval(fetchBtcPrice, 10000)
+      return () => clearInterval(interval)
+    }
+  }, [isTestMode])
 
   // 현재까지 받은 이자 계산 (매달 25일 입금)
   const calculateReceivedInterest = () => {
@@ -145,6 +179,21 @@ function App() {
       <header className="app-header">
         <h1>대출 상환 계산기</h1>
         <p className="subtitle">Bitcoin 가격 기반 상환 금액 계산</p>
+        {isTestMode && (
+          <div className="test-mode-badge">
+            🧪 테스트 모드: BTC 가격 = {testPrice?.toLocaleString('ko-KR')} 원
+            <button 
+              onClick={() => {
+                window.location.href = window.location.pathname
+                setIsTestMode(false)
+                setTestPrice(null)
+              }}
+              className="test-mode-close"
+            >
+              ✕
+            </button>
+          </div>
+        )}
       </header>
 
       <main className="app-main">

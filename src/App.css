@@ -30,6 +30,48 @@
   font-size: 1rem;
 }
 
+.test-mode-badge {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  border-radius: 25px;
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 600;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  animation: pulse 2s infinite;
+}
+
+.test-mode-close {
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.test-mode-close:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
 .app-main {
   flex: 1;
   padding: 2rem;
