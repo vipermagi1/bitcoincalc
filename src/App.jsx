@@ -160,8 +160,8 @@ function App() {
       }
     } else {
       // 현재 BTC 가격이 당시 가격보다 낮거나 같은 경우
-      // 원금만 상환, 이자는 이미 받음
-      const repaymentAmount = LOAN_AMOUNT - receivedInterest
+      // 원금만 상환, 이자는 이미 받았으므로 빼지 않음
+      const repaymentAmount = LOAN_AMOUNT
       
       return {
         repaymentAmount: Math.max(0, repaymentAmount), // 음수 방지
@@ -284,13 +284,19 @@ function App() {
                       <span className="calc-label">추가금 (0.88개 재구매 비용 - 원금)</span>
                       <span className="calc-value highlight">{Math.round(repaymentInfo.additionalAmount).toLocaleString('ko-KR')} 원</span>
                     </div>
+                    <div className="calc-row">
+                      <span className="calc-label">누적 받은 이자</span>
+                      <span className="calc-value">- {receivedInterest.toLocaleString('ko-KR')} 원</span>
+                    </div>
                   </>
                 )}
                 
-                <div className="calc-row">
-                  <span className="calc-label">누적 받은 이자</span>
-                  <span className="calc-value">- {receivedInterest.toLocaleString('ko-KR')} 원</span>
-                </div>
+                {repaymentInfo.scenario === 'low' && (
+                  <div className="calc-row">
+                    <span className="calc-label">이자 (이미 받았으므로 제외)</span>
+                    <span className="calc-value">{receivedInterest.toLocaleString('ko-KR')} 원</span>
+                  </div>
+                )}
                 
                 <div className="calc-divider"></div>
                 
