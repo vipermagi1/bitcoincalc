@@ -112,6 +112,7 @@
   background: rgba(255, 255, 255, 0.95);
   border-radius: 10px;
   padding: 2rem;
+  margin-top: 2rem;
   margin-bottom: 2rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -239,15 +240,8 @@
   background: rgba(255, 255, 255, 0.95);
   border-radius: 10px;
   padding: 2rem;
+  margin-bottom: 2rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.repayment-result.scenario-high {
-  border-left: 5px solid #38a169;
-}
-
-.repayment-result.scenario-low {
-  border-left: 5px solid #e53e3e;
 }
 
 .repayment-result h2 {
