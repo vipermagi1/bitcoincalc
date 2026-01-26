@@ -149,10 +149,11 @@ function App() {
       // 추가금 = (현재 BTC 가격으로 0.88개 구매 비용) - 원금
       const additionalAmount = btcValueAtCurrentPrice - LOAN_AMOUNT
       // 상환 금액 = 원금 + 추가금 - 받은 이자
-      const repaymentAmount = LOAN_AMOUNT + additionalAmount - receivedInterest
+      // 최소 상환 금액은 원금(1.2억원) 이상이어야 함
+      const repaymentAmount = Math.max(LOAN_AMOUNT, LOAN_AMOUNT + additionalAmount - receivedInterest)
       
       return {
-        repaymentAmount: Math.max(0, repaymentAmount), // 음수 방지
+        repaymentAmount: repaymentAmount,
         receivedInterest,
         additionalAmount,
         scenario: 'high',
