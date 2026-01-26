@@ -148,9 +148,17 @@ function App() {
       const btcValueAtCurrentPrice = currentBtcPrice * BTC_AMOUNT
       // 추가금 = (현재 BTC 가격으로 0.88개 구매 비용) - 원금
       const additionalAmount = btcValueAtCurrentPrice - LOAN_AMOUNT
-      // 상환 금액 = 원금 + 추가금 - 받은 이자
+      // 기본적으로는 이자를 차감하지 않지만, 추가금이 이자보다 높을 때만 이자 차감
+      let repaymentAmount
+      if (additionalAmount > receivedInterest) {
+        // 추가금이 이자보다 높으면 이자 차감
+        repaymentAmount = LOAN_AMOUNT + additionalAmount - receivedInterest
+      } else {
+        // 추가금이 이자보다 낮거나 같으면 이자 차감 안 함
+        repaymentAmount = LOAN_AMOUNT + additionalAmount
+      }
       // 최소 상환 금액은 원금(1.2억원) 이상이어야 함
-      const repaymentAmount = Math.max(LOAN_AMOUNT, LOAN_AMOUNT + additionalAmount - receivedInterest)
+      repaymentAmount = Math.max(LOAN_AMOUNT, repaymentAmount)
       
       return {
         repaymentAmount: repaymentAmount,
@@ -285,10 +293,16 @@ function App() {
                       <span className="calc-label">추가금 (0.88개 재구매 비용 - 원금)</span>
                       <span className="calc-value highlight">{Math.round(repaymentInfo.additionalAmount).toLocaleString('ko-KR')} 원</span>
                     </div>
-                    <div className="calc-row">
-                      <span className="calc-label">누적 납입 이자</span>
-                      <span className="calc-value">- {receivedInterest.toLocaleString('ko-KR')} 원</span>
-                    </div>
+                    {repaymentInfo.additionalAmount > receivedInterest ? (
+                      <div className="calc-row">
+                        <span className="calc-label">누적 납입 이자</span>
+                        <span className="calc-value">- {receivedInterest.toLocaleString('ko-KR')} 원</span>
+                      </div>
+                    ) : (
+                      <div className="calc-row info-note">
+                        <span className="calc-label">※ 추가금이 이자보다 낮아 이자는 차감하지 않습니다.</span>
+                      </div>
+                    )}
                     <div className="calc-divider"></div>
                     <div className="calc-row final">
                       <span className="calc-label">최종 상환 금액</span>
