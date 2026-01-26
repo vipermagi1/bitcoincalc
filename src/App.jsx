@@ -161,10 +161,11 @@ function App() {
     } else {
       // 현재 BTC 가격이 당시 가격보다 낮거나 같은 경우
       // 원금만 상환, 이자는 이미 받았으므로 빼지 않음
+      // 최종 상환 금액은 항상 원금(1.2억원) 이상이어야 함
       const repaymentAmount = LOAN_AMOUNT
       
       return {
-        repaymentAmount: Math.max(0, repaymentAmount), // 음수 방지
+        repaymentAmount: repaymentAmount, // 항상 원금과 동일 (1.2억원)
         receivedInterest,
         additionalAmount: 0,
         scenario: 'low',
