@@ -190,7 +190,7 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>대출 상환 계산기</h1>
+        <h1>대출상환액 계산기</h1>
         <p className="subtitle">Bitcoin 가격 기반 상환 금액 계산</p>
         {isTestMode && (
           <div className="test-mode-badge">
